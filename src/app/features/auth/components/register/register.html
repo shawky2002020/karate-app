@@ -1,0 +1,30 @@
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Sign Up</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <ion-item>
+        <ion-label position="stacked">Username</ion-label>
+        <ion-input type="text" formControlName="username" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input type="password" formControlName="password" required></ion-input>
+      </ion-item>
+
+      <div *ngIf="error" class="error ion-margin-top">{{ error }}</div>
+
+      <ion-button expand="block" type="submit" [disabled]="loading" class="ion-margin-top">
+        {{ loading ? 'Signing in...' : 'Sign in' }}
+      </ion-button>
+    </form>
+
+    <div class="ion-text-center ion-margin-top">
+      <p>Don't have an account? <a routerLink="/auth/register">Register</a></p>
+    </div>
+  </ion-content>
