@@ -1,0 +1,7 @@
+{
+  "name": "karate-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
