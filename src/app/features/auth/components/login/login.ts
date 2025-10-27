@@ -1,8 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  IonicModule,
+  LoadingController,
+  ToastController,
+} from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,57 +29,52 @@ export class LoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private auth: AuthService
   ) {
     this.form = this.fb.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   async submit() {
     if (this.form.invalid) {
-      this.error = 'Please fill in all required fields.';
+      this.form.markAllAsTouched(); // ✅ force show validation messages
       return;
     }
 
     this.loading = true;
-    this.error = '';
+    const loader = await this.loadingCtrl.create({ message: 'Signing in...' });
+    await loader.present();
 
-    const { username, password } = this.form.value;
-
-    // Simulate an API request (replace this with your real authentication service)
-    try {
-      const loader = await this.loadingCtrl.create({ message: 'Signing in...' });
-      await loader.present();
-
-      // Fake delay
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-
-      if (username === 'admin' && password === '123456') {
-        await loader.dismiss();
-
+    this.auth.login(this.form.value).subscribe({
+      next: async () => {
+        // Dismiss loader, show success toast, then navigate (replaceUrl)
+        try { await loader.dismiss(); } catch (e) { /* ignore if already dismissed */ }
         const toast = await this.toastCtrl.create({
-          message: 'Login successful!',
+          message: 'Login successful',
           duration: 1500,
           color: 'success',
         });
         await toast.present();
 
-        this.router.navigateByUrl('/home', { replaceUrl: true });
-      } else {
-        throw new Error('Invalid username or password');
-      }
-    } catch (err: any) {
-      this.error = err.message || 'Login failed. Please try again.';
-      const toast = await this.toastCtrl.create({
-        message: this.error,
-        duration: 2000,
-        color: 'danger',
-      });
-      await toast.present();
-    } finally {
-      this.loading = false;
-    }
+        this.loading = false;
+        void this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
+      },
+      error: async (err) => {
+        try { await loader.dismiss(); } catch (e) { /* ignore */ }
+        this.loading = false;
+        console.log(err.message);
+        
+        this.error = err?.message || 'Login failed. Try again.';
+        const toast = await this.toastCtrl.create({
+          message: this.error,
+          duration: 2500,
+          color: 'danger',
+        });
+        await toast.present();
+      },
+    });
   }
 }

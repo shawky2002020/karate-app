@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { LoginComponent } from './components/login/login';
 import { IonicModule } from '@ionic/angular';
 
+
 @NgModule({
   declarations: [LoginComponent, RegisterComponent],
   imports: [AuthRoutingModule, SharedModule],

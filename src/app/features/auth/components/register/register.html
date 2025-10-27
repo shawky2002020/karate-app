@@ -1,30 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+    <ion-button slot="end" routerLink="/tabs/home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Sign Up</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <!-- Username -->
+    <ion-item>
+      <ion-label position="stacked">Username</ion-label>
+      <ion-input type="text" formControlName="username"></ion-input>
+    </ion-item>
+    <ion-note
+      color="danger"
+      *ngIf="f['username'].touched && f['username'].errors?.['required']"
+    >
+      Username is required.
+    </ion-note>
+    <ion-note
+      color="danger"
+      *ngIf="f['username'].touched && f['username'].errors?.['minlength']"
+    >
+      Username must be at least 3 characters.
+    </ion-note>
 
-  <ion-content class="ion-padding">
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <ion-item>
-        <ion-label position="stacked">Username</ion-label>
-        <ion-input type="text" formControlName="username" required></ion-input>
-      </ion-item>
+    <!-- Email -->
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-note
+      color="danger"
+      *ngIf="f['email'].touched && f['email'].errors?.['required']"
+    >
+      Email is required.
+    </ion-note>
+    <ion-note
+      color="danger"
+      *ngIf="f['email'].touched && f['email'].errors?.['email']"
+    >
+      Please enter a valid email.
+    </ion-note>
 
-      <ion-item>
-        <ion-label position="stacked">Password</ion-label>
-        <ion-input type="password" formControlName="password" required></ion-input>
-      </ion-item>
+    <!-- Password -->
+    <ion-item>
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-note
+      color="danger"
+      *ngIf="f['password'].touched && f['password'].errors?.['required']"
+    >
+      Password is required.
+    </ion-note>
+    <ion-note
+      color="danger"
+      *ngIf="f['password'].touched && f['password'].errors?.['minlength']"
+    >
+      Password must be at least 6 characters.
+    </ion-note>
 
-      <div *ngIf="error" class="error ion-margin-top">{{ error }}</div>
+    <!-- Gender -->
+    <ion-item>
+      <ion-label position="stacked">Gender</ion-label>
+      <ion-select formControlName="gender">
+        <ion-select-option value="male">Male</ion-select-option>
+        <ion-select-option value="female">Female</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-note
+      color="danger"
+      *ngIf="f['gender'].touched && f['gender'].errors?.['required']"
+    >
+      Please select a gender.
+    </ion-note>
 
-      <ion-button expand="block" type="submit" [disabled]="loading" class="ion-margin-top">
-        {{ loading ? 'Signing in...' : 'Sign in' }}
-      </ion-button>
-    </form>
+    <!-- API Error -->
+    <div *ngIf="error" class="error ion-margin-top">{{ error }}</div>
 
-    <div class="ion-text-center ion-margin-top">
-      <p>Don't have an account? <a routerLink="/auth/register">Register</a></p>
-    </div>
-  </ion-content>
+    <!-- Submit -->
+    <ion-button
+      expand="block"
+      type="submit"
+      [disabled]="loading"
+      class="ion-margin-top"
+    >
+      {{ loading ? 'Registering...' : 'Register' }}
+    </ion-button>
+  </form>
+
+  <div class="ion-text-center ion-margin-top">
+    <p>Already have an account? <a routerLink="/auth/login">Login</a></p>
+  </div>
+</ion-content>

@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+ {
+    path: '',
+    redirectTo: 'tabs',
+    pathMatch: 'full'
+  },
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    path: 'tabs',
+    loadChildren: () => import('./tabs/tabs-routing.module').then(m => m.TabsPageRoutingModule)
   },
   // Feature modules (lazy-loaded)
   {
@@ -26,6 +31,10 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'home',
     pathMatch: 'full',
+  },
+  {
+    path: 'tabs',
+    loadComponent: () => import('./tabs/tabs.page').then( m => m.TabsPage)
   },
 ];
 

@@ -1,0 +1,13 @@
+// Common button styles
+
+.btn-primary {
+  --background: var(--ion-color-primary);
+  --color: #fff;
+  border-radius: 6px;
+  padding: 0.3rem .7rem;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.08);
+}

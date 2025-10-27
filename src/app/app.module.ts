@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import {IonicModule} from '@ionic/angular'
 import { SharedModule } from './shared/shared.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
@@ -13,7 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     IonicModule.forRoot(),
     CoreModule,
     SharedModule,
+    AppComponent
+  ]
 
-  ],
 })
 export class AppModule {}

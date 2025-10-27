@@ -1,27 +1,122 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { User } from '../../models/user.model';
+import { User, userResponse } from '../../shared/models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { auth, baseUrl } from 'src/app/shared/const/url';
+// import { ThemeService } from './theme.service';
+import { Router } from '@angular/router';
+import { LoaderService } from './loader.service';
 
-@Injectable({ providedIn: 'root' })
+//Store Key for LocalStorage
+export const USER_KEY = 'user';
+
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  currentUser$ = this.currentUserSubject.asObservable();
+  private userSubject = new BehaviorSubject<User>(
+    this.getUserFromLocalStorage()
+  );
+  public userObservable: Observable<User>;
 
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    // private themeService: ThemeService,
+    private router: Router,
+    private loadingService: LoaderService
+  ) {
+    this.userObservable = this.userSubject.asObservable();
+  }
 
-  login(username: string, password: string): Observable<User> {
-    // Placeholder: replace with real API call via ApiService
-    const user: User = { id: '1', username, roles: ['coach'] } as User;
-    this.currentUserSubject.next(user);
-    return of(user);
+  public get currentUser(): User {
+    return this.userSubject.value;
+  }
+
+  login(user: User): Observable<userResponse> {
+    return this.http.post<userResponse>(auth.USERS_LOGIN, user).pipe(
+      tap({
+        next: (res) => {
+          const newUser = {
+            ...res.user,
+            token: res.token,
+          };
+          this.setUserToLocalStorage(newUser);
+          this.userSubject.next(newUser);
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      })
+    );
+  }
+
+  register(user: User): Observable<userResponse> {
+    return this.http.post<userResponse>(auth.USERS_REGISTER, user).pipe(
+      tap({
+        next: (res) => {
+          // this.loadingService.showLoader()
+
+          // this.themeService.switchToLightTheme();
+          const newUser = {
+            ...res.user,
+            token: res.token,
+          };
+          this.setUserToLocalStorage(newUser);
+          this.userSubject.next(newUser);
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      })
+    );
   }
 
   logout() {
-    this.currentUserSubject.next(null);
+    this.userSubject.next(new User());
+    localStorage.removeItem(USER_KEY);
+    // this.themeService.switchToDarkTheme();
+    this.router.navigate(['/']);
   }
 
-  getToken(): string | null {
-    // Placeholder token retrieval
-    return null;
+  private setUserToLocalStorage(user: User) {
+    if (localStorage.getItem(USER_KEY)) {
+      localStorage.removeItem(USER_KEY);
+    }
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+
+  public getUserFromLocalStorage(): User {
+    if (typeof window !== 'undefined' && localStorage) {
+      const userJson = localStorage.getItem(USER_KEY);
+      if (userJson) {
+        try {
+          return JSON.parse(userJson) as User;
+        } catch (error) {
+          console.error('Error parsing user data from localStorage:', error);
+          localStorage.removeItem(USER_KEY);
+        }
+      }
+    }
+    return new User();
+  }
+
+  loginWithGoogle(idToken: string): Observable<userResponse> {
+    return this.http
+      .post<userResponse>(baseUrl + '/google-login', { idToken })
+      .pipe(
+        tap({
+          next: (res) => {
+            const newUser = {
+              ...res.user,
+              token: res.token,
+            };
+            this.setUserToLocalStorage(newUser);
+            this.userSubject.next(newUser);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        })
+      );
   }
 }

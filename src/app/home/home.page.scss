@@ -1,12 +1,46 @@
-ion-grid{
-  background: rgb(255, 209, 209);
+@import '../../theme/base.scss';
+
+.header{
+  padding:0 12px;
 }
+.welcome-card{
+  padding: 12px 14px;
+}
+.action-card {
+  text-align: left;
+  height: 100%;
+  margin: 12px;
+  ion-icon {
+    font-size: 32px;
+    color: var(--ion-color-primary);
+  }
+  ion-card-title {
+    font-size: 12px;
+  }
+
+  
+}
+
+ion-list-header {
+  margin-top: 16px;
+  
+  ion-label {
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+.match-badge{
+  padding: 4px;
+}
+
 ion-row{
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #000;
 }
-ion-col{
-  text-align: center;
+
+.card-action{
+  @include flex-center;
+  padding: 12px;
 }
+

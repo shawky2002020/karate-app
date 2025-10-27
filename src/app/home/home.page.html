@@ -1,49 +1,120 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Title</ion-title>
-    <ion-buttons [collapse]="true" slot="end">
-      <ion-button routerLink="/auth/register">Register</ion-button>
-      /
-      <ion-button routerLink="/auth/login" routerDirection="forward">Login</ion-button>
+  <ion-toolbar class="header" color="light">
+    <ion-title>YOI</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/auth/login" routerDirection="forward">Sign In</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
+
+<ion-content  class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Title</ion-title>
-      <ion-buttons [collapse]="true" slot="end">
-        <ion-button routerLink="/auth/register">Register</ion-button>
-        /
-        <ion-button routerLink="/auth/login" routerDirection="forward">Login</ion-button>
-      </ion-buttons>
+      <ion-title size="large">YOI App</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div class="ion-padding">
-    Scroll the list to see the title & buttons collapse.
-  </div>
+  <!-- Welcome Card -->
+  <ion-card color="dark" class="welcome-card">
+    <ion-card-header>
+      <ion-card-title>Welcome to YOI App</ion-card-title>
+      <ion-card-subtitle>Track, analyze, and improve performance</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Streamline match data recording, generate analytical reports, and gain insights into athlete performance.
+    </ion-card-content>
+  </ion-card>
 
+  <!-- Quick Actions -->
+  <ion-grid class="actions-grid">
+    <ion-row>
+      <ion-col size="6">
+        <ion-card routerLink="/matches/new" class="action-card">
+          <ion-card-header  class="card-action">
+            <ion-icon name="stopwatch-outline" size="large"></ion-icon>
+            <ion-card-title>New Match</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card routerLink="/competitions" class="action-card">
+          <ion-card-header class="card-action">
+            <ion-icon name="trophy-outline" size="large"></ion-icon>
+            <ion-card-title>Competitions</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card routerLink="/matches" class="action-card">
+          <ion-card-header class="card-action">
+            <ion-icon name="list-outline" size="large"></ion-icon>
+            <ion-card-title>Match History</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card routerLink="/reports" class="action-card">
+          <ion-card-header class="card-action">
+            <ion-icon name="analytics-outline" size="large"></ion-icon>
+            <ion-card-title>Reports</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <!-- Recent Matches Section -->
+  <ion-list-header>
+    <ion-label>Recent Matches</ion-label>
+    <ion-button routerLink="/matches" fill="clear" size="small">View All</ion-button>
+  </ion-list-header>
+  
   <ion-list>
-    <ion-item>Item 1</ion-item>
-    <ion-item>Item 2</ion-item>
-    <ion-item>Item 3</ion-item>
-    <ion-item>Item 4</ion-item>
-    <ion-item>Item 5</ion-item>
-    <ion-item>Item 6</ion-item>
-    <ion-item>Item 7</ion-item>
-    <ion-item>Item 8</ion-item>
-    <ion-item>Item 9</ion-item>
-    <ion-item>Item 10</ion-item>
-    <ion-item>Item 11</ion-item>
-    <ion-item>Item 12</ion-item>
-    <ion-item>Item 13</ion-item>
-    <ion-item>Item 14</ion-item>
-    <ion-item>Item 15</ion-item>
-    <ion-item>Item 16</ion-item>
-    <ion-item>Item 17</ion-item>
-    <ion-item>Item 18</ion-item>
-    <ion-item>Item 19</ion-item>
-    <ion-item>Item 20</ion-item>
+    <ion-item detail="true" routerLink="/matches/1">
+      <ion-label>
+        <h3>Yehia vs. Shawky</h3>
+        <p>May 15, 2023 • Score: 5-3</p>
+      </ion-label>
+      <ion-badge class="match-badge" slot="end" color="success">Win</ion-badge>
+    </ion-item>
+    <ion-item detail="true" routerLink="/matches/2">
+      <ion-label>
+        <h3>Sarah vs. Jana</h3>
+        <p>May 12, 2023 • Score: 2-4</p>
+      </ion-label>
+      <ion-badge class="match-badge"  slot="end" color="danger">Loss</ion-badge>
+    </ion-item>
+    <ion-item detail="true" routerLink="/matches/3">
+      <ion-label>
+        <h3>Omar vs. Mohamed</h3>
+        <p>May 10, 2023 • Score: 3-3</p>
+      </ion-label>
+      <ion-badge class="match-badge"  slot="end" color="warning">Draw</ion-badge>
+    </ion-item>
   </ion-list>
 </ion-content>
+
+<!-- Tab Navigation -->
+<!-- <ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home" selected>
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="matches" routerLink="/matches">
+      <ion-icon name="stopwatch-outline"></ion-icon>
+      <ion-label>Matches</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="competitions" routerLink="/competitions">
+      <ion-icon name="trophy-outline"></ion-icon>
+      <ion-label>Competitions</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="reports" routerLink="/reports">
+      <ion-icon name="analytics-outline"></ion-icon>
+      <ion-label>Reports</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs> -->

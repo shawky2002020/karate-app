@@ -6,7 +6,7 @@ import { SharedModule } from '../shared/shared.module';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports:[SharedModule]
+  imports: [SharedModule]
 
 })
 export class HomePage {
